@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">PokeAgenda</string>
+    <string name="search">Search</string>
+    <string name="description">Description:</string>
+    <string name="number">No:</string>
+    <string name="type">Type:</string>
+</resources>

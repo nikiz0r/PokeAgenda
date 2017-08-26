@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@id/detail_image"
+    android:paddingTop="30dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/default_fontsize"
+        android:textColor="@color/fontWhite"
+        android:id="@+id/tvNational"
+        android:text="@string/number"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/default_fontsize"
+        android:textColor="@color/fontWhite"
+        android:id="@+id/tvType"
+        android:text="@string/type"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textSize="@dimen/default_fontsize"
+        android:textColor="@color/fontWhite"
+        android:id="@+id/tvDesc"
+        android:text="@string/description"
+        android:lines="4"/>
+
+</LinearLayout>
