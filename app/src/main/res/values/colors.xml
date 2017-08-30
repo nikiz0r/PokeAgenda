@@ -10,9 +10,9 @@
     <color name="defaultColor">#000000</color>
     <color name="normal">#4e4e27</color>
     <color name="fighting">#a62a22</color>
-    <color name="flying">#372b5a</color>
-    <color name="poison">#492149</color>
-    <color name="ground">#473e24</color>
+    <color name="flying">#a68fe9</color>
+    <color name="poison">#973f95</color>
+    <color name="ground">#ddba5c</color>
     <color name="rock">#a38e31</color>
     <color name="bug">#97a51c</color>
     <color name="ghost">#655089</color>

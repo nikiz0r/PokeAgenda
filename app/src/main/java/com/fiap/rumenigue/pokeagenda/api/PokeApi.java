@@ -8,6 +8,6 @@ import retrofit2.http.Path;
 
 public interface PokeApi {
 
-    @GET("/pokemon/{number}")
+    @GET("pokemon/{number}")
     Call<Pokemon> getPokemon(@Path("number") int number);
 }

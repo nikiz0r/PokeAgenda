@@ -1,9 +1,23 @@
 package com.fiap.rumenigue.pokeagenda;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.fiap.rumenigue.pokeagenda.api.PokeApi;
+import com.fiap.rumenigue.pokeagenda.model.Pokemon;
+import com.fiap.rumenigue.pokeagenda.model.TypeSlot;
+import com.squareup.picasso.Picasso;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -24,23 +38,70 @@ public class DetailActivity extends AppCompatActivity {
         tvDesc = (TextView)findViewById(R.id.tvDesc);
 
         if (getIntent() != null){
-            getIntent().getIntExtra("POKE_NUMBER", 0);
-
             // hit the api
+            PokeApi api = getRetrofit().create(PokeApi.class);
+            api.getPokemon(getIntent().getIntExtra("POKE_NUMBER", 0))
+                    .enqueue(new Callback<Pokemon>() {
+                        @Override
+                        public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
+                            if (response.body() != null) {
+                                String firstType = "", secondType = "";
 
-            String firstType, secondType;
+                                List<TypeSlot> types = response.body().getTypes();
 
-            firstType = "";
-            secondType = "";
+                                for (TypeSlot slot :
+                                        types) {
+                                    if (slot.getSlot() == 1)
+                                        firstType = slot.getType().name;
+                                    else if (slot.getSlot() == 2)
+                                        secondType = slot.getType().name;
+                                }
 
-            // bind api's return
-            changeBackground(firstType, secondType);
+                                changeBackground(firstType, secondType);
+
+                                String strTypes = firstType;
+                                if (!secondType.isEmpty()) strTypes += "/" + secondType;
+
+                                // bind data
+                                tvPokeName.setText(response.body().getName());
+                                tvType.setText(
+                                        String.format(
+                                                getResources().getString(R.string.type),
+                                                strTypes));
+                                tvNational.setText(
+                                        String.format(
+                                                getResources().getString(R.string.number),
+                                                String.valueOf(response.body().getId())));
+                                tvPokeName.setText(response.body().getName());
+                                Picasso
+                                    .with(DetailActivity.this)
+                                    .load(response.body().getSprites().getFront_default())
+                                    .into(ivPokeImage);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Pokemon> call, Throwable t) {
+                            Toast.makeText(DetailActivity.this, "Shit happened!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
         }
     }
 
     private void changeBackground(String firstType, String secondType){
         ivFirstColor.setImageResource(getColorResourceID(firstType));
-        ivSecondColor.setImageResource(getColorResourceID(secondType));
+
+        if (!secondType.isEmpty())
+            ivSecondColor.setImageResource(getColorResourceID(secondType));
+        else
+            ivSecondColor.setImageResource(getColorResourceID(firstType));
+    }
+
+    private Retrofit getRetrofit(){
+        return new Retrofit.Builder()
+                .baseUrl("http://pokeapi.co/api/v2/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
     }
 
     private int getColorResourceID(String type){
